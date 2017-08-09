@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 waves v1.0
 this is the frist version for waves
+=======
+waves v1.0°æ±¾·¢²¼
+>>>>>>> 113ca15b778a4b2b97932db62f107f2fd3173448
