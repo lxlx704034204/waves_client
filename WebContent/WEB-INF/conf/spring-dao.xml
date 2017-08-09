@@ -1,0 +1,52 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	
+	<!-- 扫描com.zyjy.dao包下所有标注@Repository的DAO组件 -->
+    <context:component-scan base-package="com.zyjy.*"/>
+    
+    <bean id="propertyConfigurer" class="com.zyjy.placeholder.EncryptPropertyPlaceholderConfigurer">
+	  <property name="locations">
+      <list>
+            <value>classpath:dubboconfiger.properties</value>
+      </list>
+	  </property>
+	</bean>
+    
+
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close"
+	    p:driverClassName="${jdbc.driverClassName}"
+	    p:url="${jdbc.url}"
+	    p:username="${jdbc.username}"
+	    p:password="${jdbc.password}"/>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/> 
+		<property name="configLocation"  value="classpath:myBatisConfig.xml"/> 
+		<property name="mappingLocations">
+		    <list>
+		    	<value>classpath*:/WEB-INF/sqlmap/**/*.xml</value>
+			    <value>classpath*:/sqlmap/**/*.xml</value>
+		    </list>
+	    </property>
+	</bean>
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="com.zyjy.dao"/>  
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>  
+    </bean>  
+   
+     <bean class="org.mybatis.spring.SqlSessionTemplate">
+      <constructor-arg ref="sqlSessionFactory"/>
+   </bean>
+   
+   <import resource="dubbo-interface.xml"/>
+</beans>
