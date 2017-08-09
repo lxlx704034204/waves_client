@@ -1,1 +1,2 @@
-waves v1.0°æ±¾·¢²¼
+waves v1.0
+this is the frist version for waves
